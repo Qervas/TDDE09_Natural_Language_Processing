@@ -1,0 +1,69 @@
+digraph CBOWClass {
+    node [shape=record];
+    rankdir=TB;
+    
+    subgraph cluster_init {
+        label="Initialization (__init__)";
+        color=lightblue;
+        style=filled;
+        
+        start_init [label="Start"];
+        createE [label="Create Embedding Matrix E"];
+        createW [label="Create Weight Matrix W"];
+        createb [label="Create Bias Vector b"];
+        end_init [label="End"];
+        
+        start_init -> createE;
+        createE -> createW;
+        createW -> createb;
+        createb -> end_init;
+    }
+
+    subgraph cluster_forward {
+        label="Forward Pass (forward)";
+        color=lightgreen;
+        style=filled;
+        
+        start_forward [label="Start"];
+        lookup [label="Lookup Embeddings"];
+        average [label="Average Embeddings"];
+        linear_transform [label="Linear Transformation"];
+        softmax [label="Softmax Function"];
+        end_forward [label="End"];
+        
+        start_forward -> lookup;
+        lookup -> average;
+        average -> linear_transform;
+        linear_transform -> softmax;
+        softmax -> end_forward;
+    }
+
+    subgraph cluster_backward {
+        label="Backward Pass (backward)";
+        color=lightyellow;
+        style=filled;
+        
+        start_backward [label="Start"];
+        onehot [label="One-hot Encode y"];
+        predict [label="Predictions (Forward Pass)"];
+        error [label="Compute Error (delta_1)"];
+        gradients [label="Compute Gradients (grad_W, grad_b)"];
+        updateW [label="Update Weight Matrix W"];
+        updateb [label="Update Bias Vector b"];
+        updateE [label="Update Embeddings E"];
+        end_backward [label="End"];
+        
+        start_backward -> onehot;
+        onehot -> predict;
+        predict -> error;
+        error -> gradients;
+        gradients -> updateW;
+        updateb -> updateW;
+        updateW -> updateE;
+        updateb -> updateE;
+        updateE -> end_backward;
+    }
+
+    // Rank constraints to align the subgraphs
+  //  { rank=same; cluster_init; cluster_forward; }
+}

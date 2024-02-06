@@ -1,0 +1,17 @@
+digraph forward {
+    rankdir=LR;
+    node [shape=record];
+    
+    start [label="Start"];
+    lookup [label="Lookup Embeddings"];
+    average [label="Average Embeddings"];
+    linear_transform [label="Linear Transformation"];
+    softmax [label="Softmax Function"];
+    end [label="End"];
+
+    start -> lookup;
+    lookup -> average;
+    average -> linear_transform;
+    linear_transform -> softmax;
+    softmax -> end;
+}
